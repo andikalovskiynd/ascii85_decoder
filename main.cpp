@@ -60,11 +60,11 @@ std::vector<unsigned char> encodeBuffer (std::istream& in) {
             coded /= 85;
         }
 
-    int outputCount = (count < 4) ? count + 1 : 5;
-    result.insert(result.end(), block, block + outputCount);
-}
+        int outputCount = (count < 4) ? count + 1 : 5;
+        result.insert(result.end(), block, block + outputCount);
+    }
 
-return result;
+    return result;
 }
 
 

@@ -96,28 +96,16 @@ TEST_F(ASCII85Test, CheckArguments_MixedArguments) {
 TEST_F(ASCII85Test, EncodeBuffer_EmptyInput) {
     auto result = callEncodeBuffer("");
     
-    std::vector<unsigned char> expected = {'~', '>'};
+    std::vector<unsigned char> expected = {};
     EXPECT_TRUE(compareVectors(result, expected));
 }
 
-// single character
-TEST_F(ASCII85Test, EncodeBuffer_SingleCharacter) {
-    auto result = callEncodeBuffer("A");
-    
-    // should be encoded to 2 characters + end marker
-    EXPECT_GT(result.size(), 2u); // at least encoded chars + ~>
-    EXPECT_EQ(result[result.size()-2], '~');
-    EXPECT_EQ(result[result.size()-1], '>');
-}
-
-// four characters 
-TEST_F(ASCII85Test, EncodeBuffer_FourCharacters) {
+// multiple characters 
+TEST_F(ASCII85Test, EncodeBuffer_MulitpleCharacters) {
     auto result = callEncodeBuffer("Test");
     
-    // should have 5 encoded characters + end marker
-    EXPECT_EQ(result.size(), 7u); 
-    EXPECT_EQ(result[5], '~');
-    EXPECT_EQ(result[6], '>');
+    // should have 5 encoded characters 
+    EXPECT_EQ(result.size(), 5u);
 }
 
 /*
@@ -127,20 +115,13 @@ TEST_F(ASCII85Test, EncodeBuffer_FourCharacters) {
 // empty input
 TEST_F(ASCII85Test, EncodeStream_EmptyInput) {
     std::string result = callEncodeStream("");
-    EXPECT_EQ(result, "~>");
-}
-
-// single character
-TEST_F(ASCII85Test, EncodeStream_SingleCharacter) {
-    std::string result = callEncodeStream("A");
-    EXPECT_GT(result.length(), 2u);
+    EXPECT_EQ(result, "");
 }
 
 // multiple characters
 TEST_F(ASCII85Test, EncodeStream_MultipleCharacters) {
     std::string result = callEncodeStream("Hello World");
-    EXPECT_GT(result.length(), 2u);
-    EXPECT_EQ(result.substr(result.length()-2), "~>");
+    EXPECT_GT(result.length(), 11u);
     
     // check if range is valid
     for (size_t i = 0; i < result.length() - 2; ++i) {

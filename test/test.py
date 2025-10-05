@@ -3,6 +3,18 @@ import subprocess
 
 EXEC =  "../ascii85"
 
+# Helper function to create Adobe-compatible ASCII85 encoding
+def adobe_a85encode(data: bytes) -> bytes:
+    """Encode data using Adobe ASCII85 format with <~ and ~> delimiters"""
+    encoded = base64.a85encode(data, adobe=True)
+    return b"<~" + encoded + b"~>"
+
+def adobe_a85decode(data: bytes) -> bytes:
+    """Decode Adobe ASCII85 format, handling <~ and ~> delimiters"""
+    if data.startswith(b"<~") and data.endswith(b"~>"):
+        data = data[2:-2]  # Remove delimiters
+    return base64.a85decode(data, adobe=True)
+
 # MAIN (DE)CODER SUBPROCESS 
 def runAscii85(arguments, input_data: bytes):
     result = subprocess.run (
