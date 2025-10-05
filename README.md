@@ -18,10 +18,10 @@ make
 * `help`    -   Show help message
 
 ## Run Examples
-`echo 'Hello World' | ./ascii85`                -   Encode (default)
-`echo 'Hello World' | ./ascii85 -e`             -   Encode explicitly
-`echo '87cURD]j7BEbo80~>' | ./ascii85 -d`       -   Decode
-`./ascii85 --stream < input.txt > output.txt`   -   Stream mode
+* `echo 'Hello World' | ./ascii85`                -   Encode (default)
+* `echo 'Hello World' | ./ascii85 -e`             -   Encode explicitly
+* `echo '87cURD]j7BEbo80~>' | ./ascii85 -d`       -   Decode
+* `./ascii85 --stream < input.txt > output.txt`   -   Stream mode
 
 ## Author and Contacts
 Andikalovskiy Nikita, 24.B82-mm, 
