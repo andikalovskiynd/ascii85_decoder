@@ -1,10 +1,24 @@
-GTEST_INC_DIR ?= /opt/homebrew/opt/googletest/include
-GTEST_LIB_DIR ?= /opt/homebrew/opt/googletest/lib
+# Detect OS and set appropriate paths (I use MacOS as main system)
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+    # macOS with Homebrew
+    GTEST_INC_DIR ?= /opt/homebrew/opt/googletest/include
+    GTEST_LIB_DIR ?= /opt/homebrew/opt/googletest/lib
+else
+    # Linux (including CI)
+    GTEST_INC_DIR ?= /usr/local/include
+    GTEST_LIB_DIR ?= /usr/local/lib
+endif
 
 CXX = g++
 CXXFLAGS = -std=c++20 -Wall -Wextra -pedantic
-TEST_CXXFLAGS = $(CXXFLAGS) -Iinclude -I$(GTEST_INC_DIR)
-LDFLAGS = -L$(GTEST_LIB_DIR) -lgtest_main -lgtest -pthread -fsanitize=address
+TEST_CXXFLAGS = $(CXXFLAGS) -Iinclude -I$(GTEST_INC_DIR) -DBUILDING_TESTS
+
+ifdef CI
+    LDFLAGS = -L$(GTEST_LIB_DIR) -lgtest_main -lgtest -pthread
+else
+    LDFLAGS = -L$(GTEST_LIB_DIR) -lgtest_main -lgtest -pthread -fsanitize=address
+endif
 
 MAIN_TARGET = ascii85
 TEST_TARGET = test_ascii85
