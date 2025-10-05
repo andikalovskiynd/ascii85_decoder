@@ -64,8 +64,6 @@ std::vector<unsigned char> encodeBuffer (std::istream& in) {
         result.insert(result.end(), block, block + outputCount);
     }
 
-    result.push_back('~');
-    result.push_back('>');
     return result;
 }
 
@@ -95,12 +93,9 @@ void encodeStream (std::istream& in, std::ostream& out) {
             coded /= 85;
         }
         
-        int outputCount = (count < 4) ? count + 1 : 5;
-        out.write(block, outputCount);
-    }
-
-    out.put('~');
-    out.put('>');
+    int outputCount = (count < 4) ? count + 1 : 5;
+    out.write(block, outputCount);
+}
 }
 
 // Decoders 
@@ -132,6 +127,11 @@ std::vector<unsigned char> decodeBuffer(std::istream& in) {
         
         for (int j = 0; j < 5 && (i + j) < input.size(); j++) {
             if (input[i + j] == '~') break;
+            
+            // here same as in stream decoder
+            if (input[i + j] < 33 || input[i + j] > 117) {
+                throw std::runtime_error("INVALID CHARACTER");
+            }
             
             chars[j] = input[i + j] - 33;
             actualChars++;
